@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nc.arose-niazi.me/scheduling/sitemap.xml

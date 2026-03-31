@@ -1,96 +1,192 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <title>CPU Scheduling Solver!</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPU Scheduling Simulator — FCFS, SJF, Priority, Round Robin | Multi-Core Gantt Chart</title>
+    <meta name="description" content="Free online CPU scheduling algorithm simulator with Gantt charts. Supports FCFS, SJF (preemptive/non-preemptive), Priority Scheduling, and Round Robin with multi-core support. Compare algorithms side by side.">
+    <meta name="keywords" content="CPU scheduling, FCFS, SJF, SRTF, priority scheduling, round robin, Gantt chart, multi-core, operating systems, process scheduling, turnaround time, waiting time, scheduling algorithms, simulator">
+    <meta name="author" content="Arose Niazi">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://nc.arose-niazi.me/scheduling/">
 
-    <link rel="stylesheet" href="input.css">
-    <link rel="stylesheet" href="table.css">
+    <!-- Open Graph -->
+    <meta property="og:title" content="CPU Scheduling Simulator — Multi-Core Gantt Chart Visualization">
+    <meta property="og:description" content="Free online CPU scheduling simulator with FCFS, SJF, Priority, and Round Robin algorithms. Multi-core support with visual Gantt charts.">
+    <meta property="og:url" content="https://nc.arose-niazi.me/scheduling/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="NC CPU Scheduler">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="CPU Scheduling Simulator — Multi-Core Gantt Chart">
+    <meta name="twitter:description" content="Free online CPU scheduling simulator with FCFS, SJF, Priority, and Round Robin. Multi-core Gantt charts and algorithm comparison.">
+
+    <!-- OG Image -->
+    <meta property="og:image" content="https://nc.arose-niazi.me/scheduling/favicon.svg">
+    <meta name="twitter:image" content="https://nc.arose-niazi.me/scheduling/favicon.svg">
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="CPU Scheduler">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" href="favicon.svg">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "CPU Scheduling Simulator",
+        "url": "https://nc.arose-niazi.me/scheduling/",
+        "description": "Free online CPU scheduling algorithm simulator with multi-core Gantt chart visualization. Supports FCFS, SJF, Priority, and Round Robin algorithms.",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires JavaScript",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Person", "name": "Arose Niazi", "url": "https://arose-niazi.me" },
+        "educationalLevel": "University",
+        "about": {
+            "@type": "Thing",
+            "name": "CPU Scheduling Algorithms",
+            "description": "Algorithms used by operating systems to schedule processes on CPU cores"
+        }
+    }
+    </script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css?v=1">
+    <!-- App -->
+    <script src="app.js?v=1" defer></script>
 </head>
 <body>
-<div class="block" style="text-align: center;">
-    <h1>CPU Scheduling Solver!</h1>
-    by Arose Niazi
-</div>
-<div class="block">
-    <form autocomplete="on">
-        <table width="100%" id="ProcessesList">
-            <tr>
-                <th colspan="4">Processes Information</th>
-            </tr>
-            <tr>
-                <th><label for="L1">Process Label</label></th>
-                <th><label for="AT1">Arrival Time</label></th>
-                <th><label for="BT1">Burst Time</label></th>
-                <th><label for="P1">Priority Time</label></th>
-            </tr>
-            <tr>
-                <td>
-                    <input type="text" maxlength="5" name="L1" id="L1" placeholder="Enter Process 1 Label" autocomplete="on" required/>
-                </td>
-                <td>
-                    <input type="number" name="AT1" id="AT1" placeholder="Enter Arrival Time" autocomplete="on" required/>
-                </td>
-                <td>
-                    <input type="number" name="BT1" id="BT1" placeholder="Enter Burst Time" autocomplete="on" required/>
-                </td>
-                <td>
-                    <input type="number" name="PT1" id="P1" placeholder="Enter Priority Time" autocomplete="on"/>
-                </td>
-            </tr>
-        </table>
-        <table width="100%">
-            <tr>
-                <th colspan="2"><label for="CoresL">Cores</label></th>
-                <th colspan="2"><label for="QuantumL">Quantum Time</label></th>
-            </tr>
-            <tr>
-                <td colspan="2">
-                <input type="number" name="Cores" id="CoresL" placeholder="Enter Cores" autocomplete="on" required/>
-                </td>
-                <td colspan="2">
-                    <input type="number" name="Quantum" id="QuantumL" placeholder="Enter Quantum Time" autocomplete="on"/>
-                </td>
-            </tr>
-        </table>
-        <table width="100%">
-            <tr>
-                <th><label for="Algo">Algorithm</label> </th>
-            </tr>
-            <tr>
-                <td rowspan="4">
-                    <select id="Algo" name="Algo">
-                        <option value="1">First Come First Serve</option>
-                        <option value="2">Shortest Job First</option>
-                        <option value="3">Priority Non Preemptive</option>
-                    </select>
-                </td>
-            </tr>
-        </table>
-        <input type="button" value="Add Process" onclick="addProcess()" />
-        <input type="button" value="Reduce Process" onclick="removeProcess()" />
-        <input type="button" value="Calculate" onclick="readInput(Cores, Algo)" />
-        <input type="button" value="Clear output" onclick="clearOutput()" />
-        <!--<label for="typeOf">Type</label>
-        <select id="typeOf" name="Masking">
-            <option value="true">Variable Length Subnet Masking</option>
-            <option value="false">Fixed Length Subnet Masking</option>
-        </select>-->
 
-    </form>
-</div>
-<br>
-<div class="block">
-    <P id="Output">
+    <!-- Suite Navigation -->
+    <nav class="suite-nav" aria-label="Suite navigation">
+        <a href="https://nc.arose-niazi.me/">← NC Suite</a>
+    </nav>
 
-    </P>
-</div>
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-inner">
+            <h1 class="site-title">CPU Scheduling<span>Simulator</span></h1>
+            <div class="header-actions">
+                <button id="history-toggle-btn" type="button" aria-label="Toggle history panel">History</button>
+                <button id="theme-toggle" type="button" aria-label="Toggle dark mode">🌙</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="primary-area">
+
+            <!-- Input Card -->
+            <section class="card" aria-label="Process input">
+                <h2 class="card-title">Process Configuration</h2>
+
+                <!-- Algorithm & Settings -->
+                <div class="controls-row">
+                    <div class="control-group">
+                        <label for="algorithm-select">Algorithm</label>
+                        <select id="algorithm-select">
+                            <option value="fcfs">FCFS</option>
+                            <option value="sjf-np">SJF (Non-Preemptive)</option>
+                            <option value="sjf-p">SJF (Preemptive / SRTF)</option>
+                            <option value="priority-np">Priority (Non-Preemptive)</option>
+                            <option value="priority-p">Priority (Preemptive)</option>
+                            <option value="rr">Round Robin</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="cores-input">Cores</label>
+                        <input type="number" id="cores-input" min="1" max="16" value="1" class="small-input">
+                    </div>
+
+                    <div class="control-group" id="quantum-wrapper">
+                        <label for="quantum-input">Quantum</label>
+                        <input type="number" id="quantum-input" min="1" max="100" value="2" class="small-input">
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="compare-toggle">
+                        <label for="compare-toggle">Compare Mode</label>
+                    </div>
+
+                    <div class="control-group" id="compare-method-wrapper">
+                        <label for="compare-select">Compare With</label>
+                        <select id="compare-select">
+                            <option value="fcfs">FCFS</option>
+                            <option value="sjf-np">SJF (Non-Preemptive)</option>
+                            <option value="sjf-p" selected>SJF (Preemptive / SRTF)</option>
+                            <option value="priority-np">Priority (Non-Preemptive)</option>
+                            <option value="priority-p">Priority (Preemptive)</option>
+                            <option value="rr">Round Robin</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Process Table -->
+                <div class="process-table-wrapper">
+                    <table class="process-table" id="process-table">
+                        <thead>
+                            <tr>
+                                <th>Label</th>
+                                <th>Arrival Time</th>
+                                <th>Burst Time</th>
+                                <th class="priority-col">Priority</th>
+                                <th class="action-col"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="process-tbody">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="btn-row">
+                    <button id="add-process-btn" class="btn btn-secondary" type="button">+ Add Process</button>
+                    <button id="random-btn" class="btn btn-secondary" type="button">Random</button>
+                    <button id="calculate-btn" class="btn btn-primary" type="button">▶ Simulate</button>
+                    <button id="clear-btn" class="btn btn-secondary" type="button">Clear Output</button>
+                </div>
+
+                <p class="tip-text">
+                    Tip: Press <kbd>Ctrl+Enter</kbd> to simulate. Lower priority number = higher priority.
+                </p>
+            </section>
+
+            <!-- Output -->
+            <section id="output" aria-label="Simulation results"></section>
+        </div>
+
+        <!-- History Panel -->
+        <aside id="history-panel">
+            <div class="card">
+                <h2 class="card-title">
+                    History
+                    <button id="clear-history-btn" class="btn btn-small btn-secondary" type="button">Clear</button>
+                </h2>
+                <div id="history-list"></div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <span>&copy; 2022&ndash;2026 Arose Niazi</span>
+            <nav class="footer-links" aria-label="Footer links">
+                <a href="https://nc.arose-niazi.me/">NC Suite</a>
+                <a href="https://github.com/Arose-Niazi/scheduling-solver" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://arose-niazi.me" target="_blank" rel="noopener noreferrer">Author</a>
+            </nav>
+        </div>
+    </footer>
+
 </body>
-<footer>
-    <script src="Writer.js"></script>
-    <script src="Process.js"></script>
-    <script src="CPUAlgo.js"></script>
-    <script src="NonPreemptive.js"></script>
-    <script src="Runner.js"></script>
-</footer>
 </html>

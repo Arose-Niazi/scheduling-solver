@@ -1,0 +1,16 @@
+{
+    "name": "CPU Scheduling Simulator",
+    "short_name": "CPU Scheduler",
+    "description": "CPU scheduling algorithm simulator with multi-core Gantt chart visualization. FCFS, SJF, Priority, Round Robin.",
+    "start_url": "/scheduling/",
+    "display": "standalone",
+    "background_color": "#f8fafc",
+    "theme_color": "#6366f1",
+    "icons": [
+        {
+            "src": "favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ]
+}

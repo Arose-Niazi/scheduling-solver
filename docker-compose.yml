@@ -1,0 +1,15 @@
+name: nc-scheduling
+
+services:
+  web:
+    build: .
+    container_name: nc-scheduling-web
+    restart: unless-stopped
+    networks:
+      - proxy
+    expose:
+      - "80"
+
+networks:
+  proxy:
+    external: true
